@@ -2,20 +2,27 @@
 
 ## Section 1: Install and Configure WSL
 
+
 1. Open Powershell in administrator mode and run:\
 `wsl --install`
 
+
 2. Restart your machine
+
 
 3. Open Powershell in user mode and run:\
 `wsl --set-default-version 2`
 
+
 4. Launch Ubuntu from the start menu
+
 
 5. Create a default Unix user account
 
+
 6. Update and Upgrade\
 `sudo apt update && sudo apt upgrade`
+
 
 ## Section 2: Install and Configure Anaconda
 
