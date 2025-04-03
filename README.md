@@ -17,6 +17,8 @@
 6. Update and Upgrade\
 `sudo apt update && sudo apt upgrade`
 
+<br>
+
 ## Section 2: Install and Configure Anaconda
 
 1. Install Anaconda\
@@ -29,6 +31,8 @@
 
 3. Activate the Conda Virtual Environment\
 `conda activate <name of env>`
+
+<br>
 
 ## Section 3: Install and Configure JupyterHub
 
@@ -75,6 +79,8 @@
 	
 	c.Spawner.default_url = '/lab'
 	```
+
+<br>
 
 ## Section 4: Configure Connection to Microsoft SQL Server
 
@@ -141,6 +147,8 @@
 	Encrypt=yes
 	TrustServerCertificate=yes
 	```
+
+<br>
 
 ## Section 5: Test JupyterHub with a notebook
 
@@ -252,3 +260,5 @@
 	```
 
 9. Run the Jupyter notebook
+
+<br>
