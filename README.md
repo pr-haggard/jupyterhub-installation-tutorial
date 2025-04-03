@@ -119,7 +119,7 @@ sudo apt-get install -y unixodbc-dev
 
 3. Edit the odbc.ini file\
 `ls -la /etc | grep 'odbc'`
-`sudo nano odbc.ini`
+`sudo nano /etc/odbc.ini`
 
 Add this block of text:
 ```
@@ -146,112 +146,111 @@ TrustServerCertificate=yes
 
 ## Section 5: Test JupyterHub with a notebook
 
-**Change to your home directory**\
-`cd ~`
-
-**Create a symbolic link**\
-`sudo ln -s /home/ai-class-test/anaconda3/envs/ai_test/bin/jupyterhub /usr/local/bin/jupyterhub`
-
-**Verify the link**\
-`ls -l /usr/local/bin/jupyterhub`
-
-**Start JupyterHub**\
-`sudo jupyterhub`
-
-**Login with your UNIX credentials**
-
-**Choose Notebook -> Python 3 (ipykernel)**
-
-**Rename the notebook**\
+1. Install a few python data science packages via Anaconda
 `conda install pyodbc pandas numpy`
 
-```
-import pyodbc
-import pandas as pd
-import numpy as np
-from IPython.display import display  # For Jupyter Notebook display
-```
+2. Create a symbolic link to shorten the 'sudo jupyterhub' command\
+`sudo ln -s /home/ai-class-test/anaconda3/envs/ai_test/bin/jupyterhub /usr/local/bin/jupyterhub`\
+`ls -l /usr/local/bin/jupyterhub`
 
-```
-# Databricks settings
+4. Start JupyterHub\
+`sudo jupyterhub`
 
-# Ensure all columns are displayed
-pd.set_option('display.max_columns', None)  # Show all columns
-#pd.set_option('display.width', 500)  # Prevent line wrapping
-#pd.set_option('display.max_colwidth', None)  # Show full content in each cell
-pd.set_option('display.max_colwidth', 50)
-#pd.set_option('display.max_rows', 100) #Show All Rows Without Limit
-```
+5. Login with your UNIX credentials
 
-```
-%%time
+6. Choose Notebook -> Python 3 (ipykernel)
 
-server = 'gaxgpsq123dv'
-database = 'DownPowerPOC_DW'
-username = 'downpower_db'
-password = '<redacted>'
-connection_string = f'DRIVER={{ODBC Driver 18 for SQL Server}};TRUSTSERVERCERTIFICATE=Yes;DSN=Downpower_POC;SERVER={server};DATABASE={database};UID={username};PWD={password}'
+7. Rename the notebook
 
-# Establish connection
-try:
-    conn = pyodbc.connect(connection_string)
-    print("Connected to SQL Server successfully!")
-except Exception as e:
-    print("Error connecting to SQL Server:", e)
+8. Add these blocks of code to individual cells in the new notebook
 
-non_weather_source_data_query1 = """ 
-SELECT *
-FROM [Downpower_POC].[dbo].[PI_Data_Prior_2024]
-WHERE (CONVERT(DATE, Timestamp) >= '2021-01-01' AND CONVERT(DATE, Timestamp) <= '2022-06-30')
-AND Tag in (SELECT distinct Source_Tag
-FROM [Downpower_POC].[dbo].[Tag_Mapping]
-WHERE Name NOT LIKE ('%weather%'));
-"""
-non_weather_source_data_query2 = """ 
-SELECT *
-FROM [Downpower_POC].[dbo].[PI_Data_Prior_2024]
-WHERE (CONVERT(DATE, Timestamp) >= '2022-07-01' AND CONVERT(DATE, Timestamp) <= '2023-12-31')
-AND Tag in (SELECT distinct Source_Tag
-FROM [Downpower_POC].[dbo].[Tag_Mapping]
-WHERE Name NOT LIKE ('%weather%'));
-"""
+	```
+	import pyodbc
+	import pandas as pd
+	import numpy as np
+	from IPython.display import display  # For Jupyter Notebook display
+	```
 
-#non_weather_src_df1 = pd.read_sql(non_weather_source_data_query1, conn)
-#non_weather_src_df2 = pd.read_sql(non_weather_source_data_query2, conn)
+	```
+	# Databricks settings
+	
+	# Ensure all columns are displayed
+	pd.set_option('display.max_columns', None)  # Show all columns
+	#pd.set_option('display.width', 500)  # Prevent line wrapping
+	#pd.set_option('display.max_colwidth', None)  # Show full content in each cell
+	pd.set_option('display.max_colwidth', 50)
+	#pd.set_option('display.max_rows', 100) #Show All Rows Without Limit
+	```
 
-non_weather_fact_data_query = """ 
-SELECT distinct Unit, System, PITagName, EquipmentId, PIMeanValue, PITimeStamp
-FROM [DownPowerPOC_DW].[dbo].[FactPIData]
-ORDER BY PITimeStamp;
-"""
+	```
+	%%time
+	
+	server = 'gaxgpsq123dv'
+	database = 'DownPowerPOC_DW'
+	username = 'downpower_db'
+	password = '<redacted>'
+	connection_string = f'DRIVER={{ODBC Driver 18 for SQL Server}};TRUSTSERVERCERTIFICATE=Yes;DSN=Downpower_POC;SERVER={server};DATABASE={database};UID={username};PWD={password}'
+	
+	# Establish connection
+	try:
+	    conn = pyodbc.connect(connection_string)
+	    print("Connected to SQL Server successfully!")
+	except Exception as e:
+	    print("Error connecting to SQL Server:", e)
+	
+	non_weather_source_data_query1 = """ 
+	SELECT *
+	FROM [Downpower_POC].[dbo].[PI_Data_Prior_2024]
+	WHERE (CONVERT(DATE, Timestamp) >= '2021-01-01' AND CONVERT(DATE, Timestamp) <= '2022-06-30')
+	AND Tag in (SELECT distinct Source_Tag
+	FROM [Downpower_POC].[dbo].[Tag_Mapping]
+	WHERE Name NOT LIKE ('%weather%'));
+	"""
+	non_weather_source_data_query2 = """ 
+	SELECT *
+	FROM [Downpower_POC].[dbo].[PI_Data_Prior_2024]
+	WHERE (CONVERT(DATE, Timestamp) >= '2022-07-01' AND CONVERT(DATE, Timestamp) <= '2023-12-31')
+	AND Tag in (SELECT distinct Source_Tag
+	FROM [Downpower_POC].[dbo].[Tag_Mapping]
+	WHERE Name NOT LIKE ('%weather%'));
+	"""
+	
+	#non_weather_src_df1 = pd.read_sql(non_weather_source_data_query1, conn)
+	#non_weather_src_df2 = pd.read_sql(non_weather_source_data_query2, conn)
+	
+	non_weather_fact_data_query = """ 
+	SELECT distinct Unit, System, PITagName, EquipmentId, PIMeanValue, PITimeStamp
+	FROM [DownPowerPOC_DW].[dbo].[FactPIData]
+	ORDER BY PITimeStamp;
+	"""
+	
+	non_weather_fact_df = pd.read_sql(non_weather_fact_data_query, conn)
+	
+	tag_mapping_query = """SELECT distinct *
+	  FROM [Downpower_POC].[dbo].[Tag_Mapping]
+	  WHERE Name NOT LIKE ('%weather%')"""
+	
+	tag_mapping_df = pd.read_sql(tag_mapping_query, conn)
+	
+	fact_downpower_query = """
+	SELECT [DownPowerEventType],[CauseCode],[Unit],[IsForced],[DownPowerEventStartTime],[DownPowerEventEndTime],CONVERT(DATE, DownPowerEventStartTime) as DownPowerEventStartDate, 
+	CONVERT(DATE, DownPowerEventEndTime) as DownPowerEventEndDate,[DownPowerEventDurationHours],[DownPowerEventCapacityReduction],[DownPowerEventGenerationLoss],[DownPowerEventDescription]
+	FROM [DownPowerPOC_DW].[dbo].[FactDownPower]
+	WHERE IsForced = 'Y';
+	"""
+	
+	fact_downpower_df = pd.read_sql(fact_downpower_query, conn)
+	
+	#Close connection
+	conn.close()
+	
+	print("Command completed successfully")
+	```
 
-non_weather_fact_df = pd.read_sql(non_weather_fact_data_query, conn)
+	```
+	# Display results
+	print("Number of rows and columns:", non_weather_fact_df.shape)
+	non_weather_fact_df.head()
+	```
 
-tag_mapping_query = """SELECT distinct *
-  FROM [Downpower_POC].[dbo].[Tag_Mapping]
-  WHERE Name NOT LIKE ('%weather%')"""
-
-tag_mapping_df = pd.read_sql(tag_mapping_query, conn)
-
-fact_downpower_query = """
-SELECT [DownPowerEventType],[CauseCode],[Unit],[IsForced],[DownPowerEventStartTime],[DownPowerEventEndTime],CONVERT(DATE, DownPowerEventStartTime) as DownPowerEventStartDate, 
-CONVERT(DATE, DownPowerEventEndTime) as DownPowerEventEndDate,[DownPowerEventDurationHours],[DownPowerEventCapacityReduction],[DownPowerEventGenerationLoss],[DownPowerEventDescription]
-FROM [DownPowerPOC_DW].[dbo].[FactDownPower]
-WHERE IsForced = 'Y';
-"""
-
-fact_downpower_df = pd.read_sql(fact_downpower_query, conn)
-
-#Close connection
-conn.close()
-
-print("Command completed successfully")
-```
-
-```
-# Display results
-print("Number of rows and columns:", non_weather_fact_df.shape)
-non_weather_fact_df.head()
-```
-
-**Run the Jupyter notebook**
+9. Run the Jupyter notebook
