@@ -19,15 +19,15 @@
 
 ## Section 2: Install and Configure Anaconda
 
-**Install Anaconda**\
+1. Install Anaconda\
 `wget https://repo.anaconda.com/archive/Anaconda3-2024.10-1-Linux-x86_64.sh`\
 `bash ./Anaconda3-2024.10-1-Linux-x86_64.sh`\
 `source ~/.bashrc`
 
-**Create Conda Virtual Environment**\
+2. Create a Conda Virtual Environment\
 `conda create -n <name of env> python=3.12`
 
-**Activate Conda Virtual Environment**\
+3. Activate the Conda Virtual Environment\
 `conda activate <name of env>`
 
 ## Section 3: Install and Configure JupyterHub
