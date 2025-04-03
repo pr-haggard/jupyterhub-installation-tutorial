@@ -115,14 +115,16 @@
 2. Run the bash script\
 `sudo bash ./msodbc18.sh`
 
-**OPTIONAL: Install tree**\
-`sudo apt update && sudo apt upgrade`\
-`sudo apt install tree`\
-`tree /opt`\
-`cat microsoft/msodbcsql18/etc/odbcinst.ini`
+	OPTIONAL: Install tree
+	```
+	sudo apt update && sudo apt upgrade
+	sudo apt install tree
+	tree /opt
+	cat microsoft/msodbcsql18/etc/odbcinst.ini
+	```
 
 3. Edit the odbc.ini file\
-`ls -la /etc | grep 'odbc'`
+`ls -la /etc | grep 'odbc'`\
 `sudo nano /etc/odbc.ini`
 
 	Add this block of text:
