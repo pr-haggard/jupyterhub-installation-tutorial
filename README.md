@@ -32,20 +32,20 @@
 
 ## Section 3: Install and Configure JupyterHub
 
-**Install JupyterHub**\
+1. Install JupyterHub\
 `conda install jupyterhub`\
 `conda install jupyterlab notebook`
 
-**Install NodeJS and NPM**\
+2. Install NodeJS and NPM\
 `sudo apt-get install nodejs npm`
 
-**Install Configurable Http Proxy**\
+3. Install Configurable Http Proxy\
 `sudo npm install -g configurable-http-proxy`
 
-**Install SudoSpawner via pip**\
+4. Install SudoSpawner via pip\
 `pip install sudospawner`
 
-**Edit sudoers file**\
+5. Edit the sudoers file\
 `sudo visudo`
 
 Change this line:
@@ -64,7 +64,7 @@ Cmnd_Alias JUPYTER_CMD = /home/ai-class-test/anaconda3/envs/ai_test/bin/sudospaw
 ALL ALL=(ALL:ALL) NOPASSWD:JUPYTER_CMD
 ```
 
-**Generate and update JupyterHub config file**\
+6. Generate and update a JupyterHub config file\
 `jupyterhub --generate-config`
 
 Add this block of text to your jupyterhub_config.py file:
