@@ -2,25 +2,19 @@
 
 ## Section 1: Install and Configure WSL
 
-**Open Powershell in administrator mode and run:**\
+1. Open Powershell in administrator mode and run:\
 `wsl --install`
 
-**Restart your machine**
+2. Restart your machine
 
-**Open Powershell in user mode and run:**\
+3. Open Powershell in user mode and run:\
 `wsl --set-default-version 2`
 
-**Open Ubuntu from the start menu**
+4. Launch Ubuntu from the start menu
 
-**Install Ubuntu**\
-`wsl --install -d Ubuntu-24.04`\
-*This command will take several minutes to complete*
+5. Create a default Unix user account
 
-**Launch Ubuntu from the start menu**
-
-**Create a default Unix user account**
-
-**Update and Upgrade**\
+6. Update and Upgrade\
 `sudo apt update && sudo apt upgrade`
 
 ## Section 2: Install and Configure Anaconda
