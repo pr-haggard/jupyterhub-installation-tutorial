@@ -48,65 +48,63 @@
 5. Edit the sudoers file\
 `sudo visudo`
 
-Change this line:
-```
-secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
-```
+	Change this line:
+	```
+	secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
+	```
 
-To this line:
-```
-secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin:/home/ai-class-test/anaconda3/envs/ai_test/bin"
-```
+	To this line:
+	```
+	secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin:/home/ai-class-test/anaconda3/envs/ai_test/bin"
+	```
 
-Then add this block of text towards the bottom of the file:
-```
-Cmnd_Alias JUPYTER_CMD = /home/ai-class-test/anaconda3/envs/ai_test/bin/sudospawner
-ALL ALL=(ALL:ALL) NOPASSWD:JUPYTER_CMD
-```
+	Then add this block of text towards the bottom of the file:
+	```
+	Cmnd_Alias JUPYTER_CMD = /home/ai-class-test/anaconda3/envs/ai_test/bin/sudospawner
+	ALL ALL=(ALL:ALL) NOPASSWD:JUPYTER_CMD
+	```
 
 6. Generate and update a JupyterHub config file\
 `jupyterhub --generate-config`
 
-Add this block of text to your jupyterhub_config.py file:
-
-```
-c.Authenticator.allow_all = True
-
-c.JupyterHub.spawner_class='sudospawner.SudoSpawner'
-
-c.Spawner.default_url = '/lab'
-```
+	Add this block of text to your jupyterhub_config.py file:
+	```
+	c.Authenticator.allow_all = True
+	
+	c.JupyterHub.spawner_class='sudospawner.SudoSpawner'
+	
+	c.Spawner.default_url = '/lab'
+	```
 
 ## Section 4: Configure Connection to Microsoft SQL Server
 
 1. Create a bash scripting file named msodbc18.sh in the user's home directory\
 `touch msodbc18.sh`
 
-Add this block of text to the newly created file:
-
-```
-if ! [[ "20.04 22.04 24.04 24.10" == *"$(grep VERSION_ID /etc/os-release | cut -d '"' -f 2)"* ]]; then
-	echo "Ubuntu $(grep VERSION_ID /etc/os-release | cut -d '"' -f 2) is not currently supported.";
-	exit;
-fi
-
-# Download the package to configure the Microsoft repo
-curl -sSL -O https://packages.microsoft.com/config/ubuntu/$(grep VERSION_ID /etc/os-release | cut -d '"' -f 2)/packages-microsoft-prod.deb
-# Install the package
-sudo dpkg -i packages-microsoft-prod.deb
-# Delete the file
-rm packages-microsoft-prod.deb
-
-# Install the driver
-sudo apt-get update
-sudo ACCEPT_EULA=Y apt-get install -y msodbcsql18
-# optional: for bcp and sqlcmd
-sudo ACCEPT_EULA=Y apt-get install -y mssql-tools18
-echo 'export PATH="$PATH:/opt/mssql-tools18/bin"' >> ~/.bashrc
-source ~/.bashrc
-# optional: for unixODBC development headers
-sudo apt-get install -y unixodbc-dev
-```
+	Add this block of text to the newly created file:
+	```
+	if ! [[ "20.04 22.04 24.04 24.10" == *"$(grep VERSION_ID /etc/os-release | cut -d '"' -f 2)"* ]]; then
+		echo "Ubuntu $(grep VERSION_ID /etc/os-release | cut -d '"' -f 2) is not currently supported.";
+		exit;
+	fi
+	
+	# Download the package to configure the Microsoft repo
+	curl -sSL -O https://packages.microsoft.com/config/ubuntu/$(grep VERSION_ID /etc/os-release | cut -d '"' -f 2)/packages-microsoft-prod.deb
+	# Install the package
+	sudo dpkg -i packages-microsoft-prod.deb
+	# Delete the file
+	rm packages-microsoft-prod.deb
+	
+	# Install the driver
+	sudo apt-get update
+	sudo ACCEPT_EULA=Y apt-get install -y msodbcsql18
+	# optional: for bcp and sqlcmd
+	sudo ACCEPT_EULA=Y apt-get install -y mssql-tools18
+	echo 'export PATH="$PATH:/opt/mssql-tools18/bin"' >> ~/.bashrc
+	source ~/.bashrc
+	# optional: for unixODBC development headers
+	sudo apt-get install -y unixodbc-dev
+	```
 
 2. Run the bash script\
 `sudo bash ./msodbc18.sh`
@@ -121,28 +119,28 @@ sudo apt-get install -y unixodbc-dev
 `ls -la /etc | grep 'odbc'`
 `sudo nano /etc/odbc.ini`
 
-Add this block of text:
-```
-[Downpower_POC]
-Driver=ODBC Driver 18 for SQL Server
-Server=GAXGPSQ123DV
-Database=Downpower_POC
-UID=downpower_db
-PWD=<redacted> (replace with your db password)
-Port=1433
-Encrypt=yes
-TrustServerCertificate=yes
-
-[DownPowerPOC_DW]
-Driver=ODBC Driver 18 for SQL Server
-Server=GAXGPSQ123DV
-Database=DownPowerPOC_DW
-UID=downpower_db
-PWD=<redacted> (replace with your db password)
-Port=1433
-Encrypt=yes
-TrustServerCertificate=yes
-```
+	Add this block of text:
+	```
+	[Downpower_POC]
+	Driver=ODBC Driver 18 for SQL Server
+	Server=GAXGPSQ123DV
+	Database=Downpower_POC
+	UID=downpower_db
+	PWD=<redacted> (replace with your db password)
+	Port=1433
+	Encrypt=yes
+	TrustServerCertificate=yes
+	
+	[DownPowerPOC_DW]
+	Driver=ODBC Driver 18 for SQL Server
+	Server=GAXGPSQ123DV
+	Database=DownPowerPOC_DW
+	UID=downpower_db
+	PWD=<redacted> (replace with your db password)
+	Port=1433
+	Encrypt=yes
+	TrustServerCertificate=yes
+	```
 
 ## Section 5: Test JupyterHub with a notebook
 
