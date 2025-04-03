@@ -26,10 +26,21 @@
 `bash ./Anaconda3-2024.10-1-Linux-x86_64.sh`\
 `source ~/.bashrc`
 
-2. Create a Conda Virtual Environment\
+	OPTIONAL: Install Miniconda
+	```
+	wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+	bash ./Miniconda3-latest-Linux-x86_64.sh
+	source ~/miniconda3/bin/activate
+	conda init
+	conda config --remove channels defaults
+	conda config --add channels conda-forge
+	conda config --set channel_priority strict
+	```
+
+3. Create a Conda Virtual Environment\
 `conda create -n <name of env> python=3.12`
 
-3. Activate the Conda Virtual Environment\
+4. Activate the Conda Virtual Environment\
 `conda activate <name of env>`
 
 <br>
