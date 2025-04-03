@@ -79,7 +79,7 @@ c.Spawner.default_url = '/lab'
 
 ## Section 4: Configure Connection to Microsoft SQL Server
 
-**Create the bash scripting file**\
+1. Create a bash scripting file named msodbc18.sh in the user's home directory\
 `touch msodbc18.sh`
 
 Add this block of text to the newly created file:
@@ -108,20 +108,17 @@ source ~/.bashrc
 sudo apt-get install -y unixodbc-dev
 ```
 
-**Run this command**\
+2. Run the bash script\
 `sudo bash ./msodbc18.sh`
 
-**Install tree**\
+**OPTIONAL: Install tree**\
 `sudo apt update && sudo apt upgrade`\
-`sudo apt install tree`
-
-`cd /opt`\
-`ls`\
-`tree`\
+`sudo apt install tree`\
+`tree /opt`\
 `cat microsoft/msodbcsql18/etc/odbcinst.ini`
 
-`cd /etc`\
-`ls -la | grep 'odbc`\
+3. Edit the odbc.ini file\
+`ls -la /etc | grep 'odbc'`
 `sudo nano odbc.ini`
 
 Add this block of text:
