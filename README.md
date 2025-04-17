@@ -70,12 +70,12 @@
 
 	To this line:
 	```
-	secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin:/home/ai-class-test/anaconda3/envs/ai_test/bin"
+	secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin:/home/<username>/anaconda3/envs/<name of env>/bin"
 	```
 
 	Then add this block of text towards the bottom of the file:
 	```
-	Cmnd_Alias JUPYTER_CMD = /home/ai-class-test/anaconda3/envs/ai_test/bin/sudospawner
+	Cmnd_Alias JUPYTER_CMD = /home/<username>/anaconda3/envs/<name of env>/bin/sudospawner
 	ALL ALL=(ALL:ALL) NOPASSWD:JUPYTER_CMD
 	```
 
@@ -169,7 +169,7 @@
 `conda install pyodbc pandas numpy`
 
 2. Create a symbolic link to shorten the 'sudo jupyterhub' command\
-`sudo ln -s /home/ai-class-test/anaconda3/envs/ai_test/bin/jupyterhub /usr/local/bin/jupyterhub`\
+`sudo ln -s /home/<username>/anaconda3/envs/<name of env>/bin/jupyterhub /usr/local/bin/jupyterhub`\
 `ls -l /usr/local/bin/jupyterhub`
 
 4. Start JupyterHub\
